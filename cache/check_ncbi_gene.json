@@ -1,0 +1,36 @@
+{
+  "header": {
+    "type": "esearch",
+    "version": "0.3"
+  },
+  "esearchresult": {
+    "count": "1",
+    "retmax": "1",
+    "retstart": "0",
+    "idlist": [
+      "1956"
+    ],
+    "translationset": [
+      {
+        "from": "Homo sapiens[orgn]",
+        "to": "\"Homo sapiens\"[Organism]"
+      }
+    ],
+    "translationstack": [
+      {
+        "term": "EGFR[gene]",
+        "field": "gene",
+        "count": "906",
+        "explode": "N"
+      },
+      {
+        "term": "\"Homo sapiens\"[Organism]",
+        "field": "Organism",
+        "count": "360477",
+        "explode": "Y"
+      },
+      "AND"
+    ],
+    "querytranslation": "EGFR[gene] AND \"Homo sapiens\"[Organism]"
+  }
+}

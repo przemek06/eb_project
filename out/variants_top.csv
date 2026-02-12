@@ -1,0 +1,6 @@
+variant_id,hgvs,clinical_significance,review_status,condition,source
+VCV004277604,NM_005228.5(EGFR):c.2816_2819dup (p.Ile941fs),Likely pathogenic,"criteria provided, single submitter",Lung cancer,SCV006551916
+VCV003729655,NM_005228.5(EGFR):c.1150_1160del (p.Thr384fs),Pathogenic,"criteria provided, single submitter",EGFR-related lung cancer,SCV005844279
+VCV003765034,NM_005228.5(EGFR):c.2310_2311insGGT (p.Asp770_Asn771insGly),oncogenicity: Likely oncogenic,"criteria provided, single submitter",Neoplasm,SCV005872090
+VCV004640069,NM_005228.5(EGFR):c.2157C>A (p.Gly719=),Likely benign,"criteria provided, single submitter",Hereditary cancer-predisposing syndrome,SCV007256826
+VCV004685791,NM_005228.5(EGFR):c.1912A>G (p.Thr638Ala),Uncertain significance,"criteria provided, single submitter",not provided,SCV007331535
