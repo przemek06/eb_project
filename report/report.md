@@ -1,13 +1,13 @@
 # EGFR Bioinformatics Pipeline Report
 
-Track C — EGFR (Epidermal Growth Factor Receptor)
+Track C - EGFR (Epidermal Growth Factor Receptor)
 UniProt accession: P00533 | NCBI Gene ID: 1956
 
 ## Introduction
 
-This report documents the results of a bioinformatics pipeline built for Track C, focusing on the Epidermal Growth Factor Receptor (EGFR), a receptor tyrosine kinase central to cell signaling and oncology.
+This report documents the results of a bioinformatics pipeline built for Track C. The focus is the Epidermal Growth Factor Receptor, EGFR.
 EGFR (UniProt P00533, NCBI Gene 1956) is located on chromosome 7p11.2 and encodes a 1210-amino acid transmembrane protein that binds EGF-family ligands to activate downstream signaling cascades including RAS-RAF-MEK-ERK and PI3K-AKT.
-Somatic mutations in the EGFR kinase domain are major drivers of non-small cell lung cancer and are targeted by tyrosine kinase inhibitors (erlotinib, gefitinib, osimertinib).
+Somatic variants in the EGFR kinase domain drive non small cell lung cancer. Tyrosine kinase inhibitors target common driver variants, for example erlotinib, gefitinib, and osimertinib.
 The pipeline retrieves data from two API sources (UniProt REST and NCBI E-utilities including ClinVar), maps identifiers across databases, and examines clinical variant classifications and their conflicts.
 The goal is to demonstrate reproducible, API-first data retrieval with caching, provenance tracking, and critical assessment of data quality.
 Data was retrieved programmatically and cached for offline reproducibility.
@@ -16,9 +16,9 @@ Data was retrieved programmatically and cached for offline reproducibility.
 
 The pipeline consists of three Python scripts:
 
-- `src/microstart.py` — Verifies API connectivity for UniProt REST, NCBI Gene ESearch, and ClinVar ESearch.
-- `src/stage_1.py` — Fetches UniProt record for P00533, extracts protein profile fields, fetches NCBI Gene record (ESummary, Gene ID 1956), retrieves protein (NP_005219.2) and mRNA (NM_005228.4) FASTA sequences via NCBI EFetch, and performs sequence length sanity check.
-- `src/stage_2.py` — Searches ClinVar for EGFR variants (ESearch, term "EGFR[gene]", retmax 500), fetches variant details in batches (ESummary), selects 5 representative variants, and outputs CSV.
+- `src/microstart.py` - Verifies API connectivity for UniProt REST, NCBI Gene ESearch, and ClinVar ESearch.
+- `src/stage_1.py` - Fetches UniProt record for P00533, extracts protein profile fields, fetches NCBI Gene record (ESummary, Gene ID 1956), retrieves protein (NP_005219.2) and mRNA (NM_005228.4) FASTA sequences via NCBI EFetch, and performs sequence length sanity check.
+- `src/stage_2.py` - Searches ClinVar for EGFR variants (ESearch, term "EGFR[gene]", retmax 500), fetches variant details in batches (ESummary), selects 5 representative variants, and outputs CSV.
 
 All API responses are cached in `cache/` as JSON. The pipeline can run offline from cache.
 NCBI requests include a 0.34s sleep between calls to respect rate limits.
@@ -55,7 +55,7 @@ EGFR is one of the most studied oncogenes with extensive clinical variant data i
 
 ### 2. ClinVar variants
 
-ClinVar search for "EGFR[gene]" returned 3835 total variants. 500 were fetched and examined.
+ClinVar search for "EGFR[gene]" returned 3835 total variants, we fetched and examined 500 of them.
 Classification breakdown of the 500 fetched variants: 292 Uncertain significance, 127 Likely benign, 15 Benign, 4 Benign/Likely benign, 2 Pathogenic, 1 Likely pathogenic, 49 with no germline classification, 10 with oncogenicity classification.
 
 #### Selected variants (5)
@@ -70,20 +70,23 @@ Classification breakdown of the 500 fetched variants: 292 Uncertain significance
 
 ### 3. Conflicts and interpretation
 
-Out of 500 EGFR variants fetched from ClinVar, none carry the explicit label "Conflicting interpretations of pathogenicity", which is notable for a heavily studied oncogene and reflects EGFR's nature as a somatic mutation driver rather than a germline disease gene.
+Across 500 EGFR variants, ClinVar did not assign the explicit label "Conflicting interpretations of pathogenicity". EGFR acts mainly as a somatic driver gene, so germline conflict labels appear less often.
 
 However, a subtler form of conflict exists: 10 variants have an oncogenicity classification alongside or instead of a germline classification, meaning the same variant can be "Uncertain significance" in a germline context but "Likely oncogenic" in a somatic context.
 This dual-classification pattern is characteristic of EGFR because most clinically actionable mutations (e.g. L858R, exon 19 deletions, T790M) are somatic driver mutations in lung cancer, not inherited germline variants, so the germline framework often assigns them VUS or does not apply.
 
-Review status across these variants is predominantly "criteria provided, single submitter" (1 star), meaning most classifications lack independent confirmation and should be interpreted with caution. No EGFR variants in this batch reached expert panel or practice guideline status.
+Review status across these variants is predominantly "criteria provided, single submitter" (only 1 star), meaning most classifications lack independent confirmation and should be interpreted with caution. No EGFR variants in this batch reached expert panel or practice guideline status.
 
 ## Discussion
 
 The pipeline successfully mapped identifiers from UniProt (P00533) to NCBI Gene (1956) to RefSeq sequences (NP_005219.2, NM_005228.4) and ClinVar variants. Sequence length sanity check confirmed consistency between UniProt and NCBI (both 1210 aa).
 
-The ClinVar data reveals that EGFR's variant landscape is dominated by VUS (58.4% of the 500 fetched) — a common pattern for genes where most clinical interest is in somatic rather than germline variants. The absence of explicit "Conflicting interpretations" is itself informative: it suggests that submitting laboratories largely agree within the germline framework, but the real interpretive tension is between germline and somatic classification systems.
+The ClinVar data shows that 58.4 percent of the 500 EGFR variants fall into the "Uncertain significance" category. This pattern is common for genes like EGFR. Doctors care most about EGFR mutations in tumors, not inherited ones.
+No variants carry the "Conflicting interpretations" label. Labs mostly agree when they classify EGFR variants in the inherited disease context. The real disagreement happens between two different systems. One system evaluates inherited risk. The other system evaluates cancer driver mutations. The same variant gets different labels depending on which lens you use.
 
-Bias observations: (1) ClinVar submissions for EGFR are biased toward germline testing contexts (hereditary cancer panels), while the gene's primary clinical relevance is in somatic tumor testing, which may not always feed into ClinVar. (2) Popular genes like EGFR attract more submissions, but submission volume does not equal evidence quality — nearly all variants here are single-submitter with no expert panel review. This means the data appears comprehensive but the confidence level per variant is low.
+Bias observations: 
+1. ClinVar submissions for EGFR are biased toward germline testing contexts (hereditary cancer panels), while the gene's primary clinical relevance is in somatic tumor testing, which may not always feed into ClinVar.
+2. Popular genes like EGFR attract more submissions, but submission volume does not equal evidence quality - nearly all variants here are single-submitter with no expert panel review. This means the data appears comprehensive but the confidence level per variant is low.
 
 ## References
 
